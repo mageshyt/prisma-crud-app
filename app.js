@@ -26,14 +26,13 @@ app.use("/api", userRouter);
 
 app.use("/api", postRouter);
 
-app.use((err, req, res, next) => {
-  res.status(err.status || 500);
-  res.send({
-    status: err.status || 500,
-    message: err.message,
-  });
-});
+// app.use((err, req, res, next) => {
+//   res.status(err.status || 500);
+//   res.send({
+//     status: err.status || 500,
+//     message: err.message,
+//   });
+// });
 
 const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`🚀 @ http://localhost:${PORT}`));
-
+app.listen(2000, () => console.log(`🚀 @ http://localhost:${PORT}`));

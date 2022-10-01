@@ -1,12 +1,14 @@
-const { PrismaClient } =require('@prisma/client')
-const prisma = new PrismaClient()
+const { PrismaClient } = require("@prisma/client");
+const prisma = new PrismaClient();
 
 //  const main=async()=>{
 //   // Connect the client
+
 //   await prisma.$connect()
 //   // ... you will write your Prisma Client queries here
 // }
 // main()
+
 //   .  then(async () => { await prisma.$disconnect() })
 //   .catch(async (e) => {
 //     console.error(e)
@@ -14,6 +16,6 @@ const prisma = new PrismaClient()
 //     process.exit(1)
 //   })
 
-module.exports={
-    prisma
-}
+module.exports = {
+  prisma,
+};

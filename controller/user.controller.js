@@ -1,17 +1,20 @@
 const { prisma } = require("../prisma/index");
+
 const { cookiesToToken } = require("../utils/cookiesToToken");
+
 const bcrypt = require("bcrypt");
 
 //! user sign up
 const signup = async (req, res) => {
   try {
     const { name, email, password } = req.body;
+    console.table(req.body);
     if (!name || !email || !password) {
       return res.status(400).json({ error: "Please fill all the fields" });
     }
+
     //! encrypting password
     const hashedPassword = await bcrypt.hash(password, 10);
-
     const isExist = await prisma.user.findUnique({
       where: {
         email,
@@ -22,14 +25,13 @@ const signup = async (req, res) => {
       return res.status(200).json({ error: "User already exist" });
     }
 
-    const user = await prisma.user
-      .create({
-        data: {
-          name,
-          email,
-          password: hashedPassword,
-        },
-      })
+    const user = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password: hashedPassword,
+      },
+    });
 
     // console.table(user)
     const cookie = cookiesToToken(user?.id, res);
@@ -102,26 +104,34 @@ const signIn = async (req, res) => {
   }
 };
 
-
 //! logout user
 const logout = async (req, res) => {
-    try {
-        const getCookies = req.cookies;
-        console.log(getCookies)
+  try {
+    const getCookies = req.cookies;
 
-        res.clearCookie("token");
-        res.status(200).json({ message: "User logged out successfully" });
-    } catch (err) {
-        console.log(err);
-        throw new Error("Something went wrong");
-    }
-}
+    res.clearCookie("token");
+    res.status(200).json({ message: "User logged out successfully" });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong");
+  }
+};
 
+//! get all user
+const getAllUser = async (req, res) => {
+  try {
+    const users = await prisma.user.findMany();
+    res.status(200).json({ message: "All users", users });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Something went wrong");
+  }
+};
 
 module.exports = {
   signup,
   findUser,
   signIn,
-    logout, 
+  logout,
+  getAllUser,
 };
-
